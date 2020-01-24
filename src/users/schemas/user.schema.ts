@@ -32,5 +32,9 @@ export const UserSchema = new mongoose.Schema({
                 type:String
             }
         }
-    ]
+    ],
+    rol:{
+        type:Number,
+        required:true
+    }
 },{timestamps:true})

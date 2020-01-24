@@ -1,30 +1,24 @@
-import { Module } from '@nestjs/common';
+import { Module, Delete } from '@nestjs/common';
 import { UserSchema } from './schemas/user.schema';
 import { MongooseModule } from '@nestjs/mongoose';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import {jwt} from 'jsonwebtoken'
+
+import { APP_GUARD } from '@nestjs/core';
+
+import { UserModel } from './modules/user.module';
+
 @Module({
-    imports: [
-        MongooseModule.forFeatureAsync([
-          {
-            name: 'User',
-            useFactory: async() => {
-            const schema = UserSchema;
-            schema.statics.generateJwt= async(user)=>{
-            try{
-                const token = await jwt.sign({ data: user.id }, 'iqij23ij41i9und', { expiresIn: '7d' }, { algorithm: 'RS256' })
-                return token
-            }catch(e){
-                throw new Error(e)
-            }
-            }
-        },
-          },
-        ]),
-      ],
+    imports:[UserModel],
     controllers:[UsersController],
-    providers:[UsersService]
+    providers:[UsersService,
+        {
+            provide: APP_GUARD,
+            useClass: UsersController,
+          },
+    ],
+    exports: [UsersModule]
+    
 })
 export class UsersModule {
 }
