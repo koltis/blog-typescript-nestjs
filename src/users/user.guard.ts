@@ -1,6 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable, Body } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import * as jwt from 'jsonwebtoken'
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './interfaces/user.interface';
@@ -15,5 +14,5 @@ export class UserGuard implements CanActivate {
     const request:any = context.switchToHttp().getRequest();
     return this.userService.validateUser(request)
   }
-  
+
 }

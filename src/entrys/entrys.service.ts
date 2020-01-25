@@ -6,6 +6,8 @@ import { entryDto } from './dto/entry.dto';
 import {keys} from './../config/keys'
 import jwt from 'jsonwebtoken'
 import { User } from 'src/users/interfaces/user.interface';
+import { ErrorAuth } from 'src/users/errors/error.auth';
+import { ErrorBadRequest } from 'src/users/errors/error.badRequest';
 
 @Injectable()
 export class EntrysService {
@@ -16,7 +18,8 @@ export class EntrysService {
             await entry.save()
             return entry
         }catch(e){
-            return e
+            throw new ErrorBadRequest(e)
+            
         }
     }
     async validateAdmin(req:any):Promise<boolean>{
@@ -28,13 +31,14 @@ export class EntrysService {
             return false
         }
         if(user.rol!==2){
-            return false
+            throw new Error('Unauthorized')
+            
         }
         req.user = user
         req.token = token
         return true
       }catch(e){
-        throw new Error(e)
+        throw new ErrorAuth(e)
         }
     }
 }

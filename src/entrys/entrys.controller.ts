@@ -9,11 +9,7 @@ export class EntrysController {
     @Post()
     @UseGuards(EntryGuard)
     createEntry(@Body() Entry:entryDto,@Req()req:any){
-        try{
             const entry = this.entrysService.CreateEntry(Entry)
             return entry
-        }catch(e){
-            return e
-        }
     }
 }
