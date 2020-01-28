@@ -14,5 +14,4 @@ export class UserGuard implements CanActivate {
     const request:any = context.switchToHttp().getRequest();
     return this.userService.validateUser(request)
   }
-
 }

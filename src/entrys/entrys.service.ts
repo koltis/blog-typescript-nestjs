@@ -32,7 +32,6 @@ export class EntrysService {
         }
         if(user.rol!==2){
             throw new Error('Unauthorized')
-            
         }
         req.user = user
         req.token = token

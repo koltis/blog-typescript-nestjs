@@ -39,6 +39,9 @@ export class UsersService {
     }
     async validateUser(req:any):Promise<boolean>{
         try{
+            if(!req.headers.authorization){
+                throw new Error('no auth token')
+            }
         const token = req.headers.authorization.split(' ').pop()
         const userId:any = jwt.verify(token,keys.JWTSECRET)
         const userdb = await this.UserModel.findById(userId.data)

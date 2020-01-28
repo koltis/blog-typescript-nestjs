@@ -1,8 +1,10 @@
 import { Schema } from "mongoose";
+import { UserSchema } from "src/users/schemas/user.schema";
 
 export const entrySchema = new Schema({
     author: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref:'User',
         required: true,
         trim: true
     },

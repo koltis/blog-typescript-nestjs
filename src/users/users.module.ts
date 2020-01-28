@@ -5,6 +5,8 @@ import { UsersService } from './users.service';
 import { APP_GUARD } from '@nestjs/core';
 
 import { UserModel } from './modules/user.module';
+import { UserGuard } from './user.guard';
+
 
 @Module({
     imports:[UserModel],
@@ -14,8 +16,9 @@ import { UserModel } from './modules/user.module';
             provide: APP_GUARD,
             useClass: UsersController,
           },
+        UserGuard
     ],
-    exports: [UsersModule] 
+    exports: [UsersModule,UserGuard,UsersService] 
 })
 export class UsersModule {
 }
