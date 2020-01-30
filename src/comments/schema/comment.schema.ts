@@ -1,5 +1,5 @@
 import {Schema} from 'mongoose'
-
+import {UserModel} from '../../users/modules/user.module'
 export const commentsSchema = new Schema({
 user: {
     type: Schema.Types.ObjectId,

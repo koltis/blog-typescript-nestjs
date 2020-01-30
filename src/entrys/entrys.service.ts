@@ -19,7 +19,6 @@ export class EntrysService {
             return entry
         }catch(e){
             throw new ErrorBadRequest(e)
-            
         }
     }
     async validateAdmin(req:any):Promise<boolean>{
@@ -38,6 +37,34 @@ export class EntrysService {
         return true
       }catch(e){
         throw new ErrorAuth(e)
+        }
+    }
+    async paginate(skip):Promise<any>{
+    try{
+        const arrOfEntry = await this.EntryModel.find().limit(2).skip(skip)
+        if(arrOfEntry.length<1){
+            throw new Error('this is not working sorry :c')
+        }
+        return arrOfEntry
+    }catch(e){
+        throw new ErrorBadRequest(e)
+    }
+    }
+    async searchEntryAndComents(id):Promise<any>{
+        try{    
+            const entry:any = await this.EntryModel.findById(id)
+            if(!entry){
+                throw new Error('that entry doesnt exist')
+                
+            }
+            const author = await this.userModel.findById(entry.author)
+            if(!author){
+                throw new Error('No author')
+            }
+            return entry.author = author
+        }catch(e){
+            throw new ErrorBadRequest(e)
+            
         }
     }
 }

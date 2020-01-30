@@ -11,11 +11,13 @@ import { UserGuard } from 'src/users/user.guard';
 @Module({
     imports:[EntryModel,UserModel,commentsModel],
     controllers:[CommentsController],
-    providers:[CommentsService,{
+    providers:[
+    CommentsService,
+    {
         provide:APP_GUARD,
         useClass:CommentsController
     },
-UsersService,
-UserGuard
+    UsersService,
+    UserGuard
 ]})
 export class CommentsModule {}

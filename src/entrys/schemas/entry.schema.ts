@@ -4,9 +4,8 @@ import { UserSchema } from "src/users/schemas/user.schema";
 export const entrySchema = new Schema({
     author: {
         type: Schema.Types.ObjectId,
-        ref:'User',
-        required: true,
-        trim: true
+        required:true,
+        trim:true
     },
     content: {
         type: String,

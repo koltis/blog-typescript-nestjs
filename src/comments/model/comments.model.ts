@@ -4,9 +4,9 @@ import { commentsSchema } from '../schema/comment.schema';
 export const commentsModel = MongooseModule.forFeatureAsync([
     {
       name: 'Comment',
-      useFactory: () => {
+      useFactory: async() => {
         const schema = commentsSchema;
-        return schema;
+        return schema
       },
     },
   ])
