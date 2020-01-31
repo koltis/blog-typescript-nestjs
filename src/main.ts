@@ -4,6 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize'
 import fs from 'fs'
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
 async function bootstrap() {
   const httpsOptions = {
@@ -13,6 +14,14 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     httpsOptions,
   });
+  const options = new DocumentBuilder()
+    .setTitle('Portfolio')
+    .setDescription('blog-plus-chat')
+    .setVersion('1.0')
+    .addTag('Blog')
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('api', app, document);
   app.useGlobalPipes(new ValidationPipe());
   app.use(helmet());
   app.use(mongoSanitize())

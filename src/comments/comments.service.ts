@@ -23,7 +23,7 @@ export class CommentsService {
             throw new ErrorBadRequest(e)
         }
     }
-    getComments = async(id)=>{
+    async getComments(id){
         try{
             const comments = await this.CommentModel.find({entry:id})
             if(comments.length < 1){

@@ -52,16 +52,12 @@ export class EntrysService {
     }
     async searchEntryAndComents(id):Promise<any>{
         try{    
-            const entry:any = await this.EntryModel.findById(id)
+            const entry= await this.EntryModel.findById(id).populate('author')
             if(!entry){
                 throw new Error('that entry doesnt exist')
                 
             }
-            const author = await this.userModel.findById(entry.author)
-            if(!author){
-                throw new Error('No author')
-            }
-            return entry.author = author
+            return entry
         }catch(e){
             throw new ErrorBadRequest(e)
             
