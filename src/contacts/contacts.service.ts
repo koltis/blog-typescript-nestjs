@@ -21,11 +21,11 @@ export class ContactsService {
     }
     async seeContacts(limit,skip,readed){
         try{
-            const contacts:contactInterface[]= await this.ContactModel.find({readed:readed}).limit(Number(limit)).skip(Number(skip))
+            const contacts:contactInterface[]= await this.ContactModel.find({readed:readed}).limit(limit).skip(skip)
             if(!contacts){
                 throw new Error('no contacts')
             }
-            if(readed=="false"){
+            if(!readed){
                 contacts.forEach(contact=>{
                     contact.readed=true
                     contact.save()
