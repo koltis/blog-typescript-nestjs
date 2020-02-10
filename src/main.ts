@@ -5,7 +5,7 @@ import helmet from 'helmet';
 import mongoSanitize from 'express-mongo-sanitize'
 import fs from 'fs'
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
-
+import cookieParser from 'cookie-parser'
 async function bootstrap() {
   const httpsOptions = {
     key: fs.readFileSync('./src/config/key.pem'),
@@ -23,6 +23,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, options);
   SwaggerModule.setup('api', app, document);
   app.useGlobalPipes(new ValidationPipe());
+  app.use(cookieParser());
   app.use(helmet());
   app.use(mongoSanitize())
   await app.listen(3000);

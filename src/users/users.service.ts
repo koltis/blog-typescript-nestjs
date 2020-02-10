@@ -1,4 +1,4 @@
-import { Injectable, HttpStatus, HttpException } from '@nestjs/common';
+import { Injectable, HttpStatus, HttpException, Req } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { UserDto } from './dto/user.dto';
@@ -9,6 +9,7 @@ import * as bycript from 'bcryptjs'
 import { keys } from 'src/config/keys';
 import { ErrorAuth } from './errors/error.auth';
 import { ErrorBadRequest } from './errors/error.badRequest';
+
 @Injectable()
 export class UsersService {
     constructor(@InjectModel('User') private readonly UserModel:Model<User>){}
@@ -28,10 +29,10 @@ export class UsersService {
             const userDb = await this.UserModel.findOne({email:User.email})
             const works = await bycript.compare(User.password,userDb.password)
             if(!works){
-               throw new Error('email already in use')
+                throw new Error('email already in use')
             }
             const token = await UserSchema.statics.generateJwt(userDb)
-            userDb.save()
+            await userDb.save()
             return {userDb,token}
         }catch(e){
             throw new ErrorBadRequest(e)
@@ -39,10 +40,10 @@ export class UsersService {
     }
     async validateUser(req:any):Promise<boolean>{
         try{
-            if(!req.headers.authorization){
+            if(!req.cookies.AuthToken){
                 throw new Error('no auth token')
             }
-        const token = req.headers.authorization.split(' ').pop()
+        const token = req.cookies.AuthToken.split(' ').pop()
         const userId:any = jwt.verify(token,keys.JWTSECRET)
         const userdb = await this.UserModel.findById(userId.data)
         req.user = userdb
@@ -51,6 +52,9 @@ export class UsersService {
         }catch(e){
         throw new ErrorAuth(e)
         }
+      }
+      async cookies(){
+            
       }
     }
 

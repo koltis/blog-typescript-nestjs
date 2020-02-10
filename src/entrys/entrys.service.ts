@@ -23,20 +23,20 @@ export class EntrysService {
     }
     async validateAdmin(req:any):Promise<boolean>{
         try{
-        const token = req.headers.authorization.split(' ').pop()
-        const userDb:any = jwt.verify(token,keys.JWTSECRET)
-        const user:any = await this.userModel.findById(userDb.data)
-        if(!user){
-            return false
-        }
-        if(user.rol!==2){
-            throw new Error('Unauthorized')
-        }
-        req.user = user
-        req.token = token
-        return true
-      }catch(e){
-        throw new ErrorAuth(e)
+            const token = req.cookies.AuthToken.split(' ').pop()
+            const userDb:any = jwt.verify(token,keys.JWTSECRET)
+            const user:any = await this.userModel.findById(userDb.data)
+            if(!user){
+                return false
+            }
+            if(user.rol!==2){
+                throw new Error('Unauthorized')
+            }
+            req.user = user
+            req.token = token
+            return true
+        }catch(e){
+            throw new ErrorAuth(e)
         }
     }
     async paginate(skip):Promise<any>{

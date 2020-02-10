@@ -1,20 +1,22 @@
-import { Controller, Get, Post, Body, UseGuards, Headers, Req, } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Headers, Req, Res, } from '@nestjs/common';
 import {UserDto} from './dto/user.dto'
 import{UsersService} from './users.service'
 import { UserGuard } from './user.guard';
+import { Response, request } from 'express';
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService:UsersService){}
     @Post()
-    createUser(@Body()userDto:UserDto):any{
-            return this.usersService.createUser(userDto)
+    async createUser(@Body()userDto:UserDto,@Res()res:Response):Promise<any>{
+            const user = await this.usersService.createUser(userDto)
+            res.cookie("AuthToken",user.token,{expires:new Date(Date.now()+4800000000),httpOnly:true,secure:true}).send(user.user)
     }
     @Post('/login')
-    login(@Body() userDto:UserDto):any{
-            const user = this.usersService.login(userDto)
-            return user
-    }
+    async login(@Body() userDto:UserDto,@Res()res:Response):Promise<any>{
+            const user:any = await this.usersService.login(userDto)
+            res.cookie("AuthToken",user.token,{expires:new Date(Date.now()+4800000000),httpOnly:true,secure:true}).send("good login")
+        }
     @Get()
     @UseGuards(UserGuard)
     validateUser(@Req()req:any){
