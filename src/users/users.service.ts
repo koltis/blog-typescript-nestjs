@@ -29,7 +29,7 @@ export class UsersService {
             const userDb = await this.UserModel.findOne({email:User.email})
             const works = await bycript.compare(User.password,userDb.password)
             if(!works){
-                throw new Error('email already in use')
+                throw new Error('Wrong Credentials')
             }
             const token = await UserSchema.statics.generateJwt(userDb)
             await userDb.save()

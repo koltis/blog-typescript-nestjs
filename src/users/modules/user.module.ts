@@ -36,6 +36,7 @@ export  const UserModel =MongooseModule.forFeatureAsync([
             const userObject = user.toObject()
             delete userObject.password
             delete userObject.tokens
+            delete userObject.rol
             return userObject
         }
         return UserSchema
